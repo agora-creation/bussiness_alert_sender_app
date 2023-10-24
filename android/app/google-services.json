@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "507392660242",
+    "project_id": "bussiness-alert",
+    "storage_bucket": "bussiness-alert.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507392660242:android:0a9f4c3c2b8b4bc17299cb",
+        "android_client_info": {
+          "package_name": "com.agoracreation.bussiness_alert_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlbrV04s5fJq_MC_I2QERZHftT7uijywU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507392660242:android:ebf6305f66f9a3c67299cb",
+        "android_client_info": {
+          "package_name": "com.agoracreation.bussiness_alert_sender_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlbrV04s5fJq_MC_I2QERZHftT7uijywU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
