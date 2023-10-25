@@ -5,7 +5,6 @@ class UserModel {
   String _name = '';
   String _email = '';
   String _password = '';
-  List<String> senderNumbers = [];
   String _token = '';
   DateTime _createdAt = DateTime.now();
 
@@ -22,18 +21,9 @@ class UserModel {
     _name = map['name'] ?? '';
     _email = map['email'] ?? '';
     _password = map['password'] ?? '';
-    senderNumbers = _convertSenderNumbers(map['senderNumbers'] ?? []);
     _token = map['token'] ?? '';
     if (map['createdAt'] != null) {
       _createdAt = map['createdAt'].toDate() ?? DateTime.now();
     }
-  }
-
-  List<String> _convertSenderNumbers(List list) {
-    List<String> ret = [];
-    for (String id in list) {
-      ret.add(id);
-    }
-    return ret;
   }
 }
