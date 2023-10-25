@@ -45,100 +45,97 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
           ),
         ],
       ),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.notice.title,
-              style: const TextStyle(
-                color: kBlackColor,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'SourceHanSansJP-Bold',
+        children: [
+          Text(
+            widget.notice.title,
+            style: const TextStyle(
+              color: kBlackColor,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'SourceHanSansJP-Bold',
+            ),
+          ),
+          Text(
+            widget.notice.content,
+            style: const TextStyle(
+              color: kBlackColor,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text('以下の受信ユーザーに送信します'),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(color: kGreyColor),
+                bottom: BorderSide(color: kGreyColor),
               ),
             ),
-            Text(
-              widget.notice.content,
-              style: const TextStyle(
-                color: kBlackColor,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text('以下の受信ユーザーに送信します'),
-            Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: kGreyColor),
-                  bottom: BorderSide(color: kGreyColor),
-                ),
-              ),
-              child: SizedBox(
-                height: 250,
-                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: userService.streamList(),
-                  builder: (context, snapshot) {
-                    List<UserModel> users = [];
-                    List<String> userIds =
-                        widget.senderProvider.sender?.userIds ?? [];
-                    if (snapshot.hasData) {
-                      for (DocumentSnapshot<Map<String, dynamic>> doc
-                          in snapshot.data!.docs) {
-                        UserModel user = UserModel.fromSnapshot(doc);
-                        if (userIds.contains(user.id)) {
-                          users.add(user);
-                        }
+            child: SizedBox(
+              height: 200,
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: userService.streamList(),
+                builder: (context, snapshot) {
+                  List<UserModel> users = [];
+                  List<String> userIds =
+                      widget.senderProvider.sender?.userIds ?? [];
+                  if (snapshot.hasData) {
+                    for (DocumentSnapshot<Map<String, dynamic>> doc
+                        in snapshot.data!.docs) {
+                      UserModel user = UserModel.fromSnapshot(doc);
+                      if (userIds.contains(user.id)) {
+                        users.add(user);
                       }
                     }
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: users.length,
-                      itemBuilder: (context, index) {
-                        return UserList(user: users[index]);
-                      },
-                    );
-                  },
-                ),
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      return UserList(user: users[index]);
+                    },
+                  );
+                },
               ),
             ),
-            const SizedBox(height: 16),
-            CustomLgButton(
-              label: '一斉送信する',
-              labelColor: kWhiteColor,
-              backgroundColor: kBlueColor,
-              onPressed: () async {
-                List<String> userIds =
-                    widget.senderProvider.sender?.userIds ?? [];
-                for (String userId in userIds) {
-                  UserModel? user = await userService.selectId(userId);
-                  if (user != null) {
-                    fmServices.send(
-                      token: user.token,
-                      title: widget.notice.title,
-                      body: widget.notice.content,
-                    );
-                    userNoticeService.create({
-                      'id': widget.notice.id,
-                      'userId': userId,
-                      'senderId': widget.notice.senderId,
-                      'senderName': widget.senderProvider.sender?.name,
-                      'title': widget.notice.title,
-                      'content': widget.notice.content,
-                      'isAnswer': widget.notice.isAnswer,
-                      'isRead': false,
-                      'createdAt': DateTime.now(),
-                    });
-                  }
+          ),
+          const SizedBox(height: 16),
+          CustomLgButton(
+            label: '一斉送信する',
+            labelColor: kWhiteColor,
+            backgroundColor: kBlueColor,
+            onPressed: () async {
+              List<String> userIds =
+                  widget.senderProvider.sender?.userIds ?? [];
+              for (String userId in userIds) {
+                UserModel? user = await userService.selectId(userId);
+                if (user != null) {
+                  fmServices.send(
+                    token: user.token,
+                    title: widget.notice.title,
+                    body: widget.notice.content,
+                  );
+                  userNoticeService.create({
+                    'id': widget.notice.id,
+                    'userId': userId,
+                    'senderId': widget.notice.senderId,
+                    'senderName': widget.senderProvider.sender?.name,
+                    'title': widget.notice.title,
+                    'content': widget.notice.content,
+                    'isAnswer': widget.notice.isAnswer,
+                    'isRead': false,
+                    'createdAt': DateTime.now(),
+                  });
                 }
-                if (!mounted) return;
-                showMessage(context, '一斉送信が完了しました', true);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
+              }
+              if (!mounted) return;
+              showMessage(context, '一斉送信が完了しました', true);
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }

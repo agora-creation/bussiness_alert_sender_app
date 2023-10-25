@@ -49,55 +49,55 @@ class _SenderNoticeModScreenState extends State<SenderNoticeModScreen> {
           ),
         ],
       ),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            CustomTextFormField(
-              controller: titleController,
-              textInputType: TextInputType.name,
-              maxLines: 1,
-              label: '通知タイトル',
-              color: kBlackColor,
-              prefix: Icons.short_text,
-            ),
-            const SizedBox(height: 8),
-            CustomTextFormField(
-              controller: contentController,
-              textInputType: TextInputType.multiline,
-              maxLines: null,
-              label: '通知内容',
-              color: kBlackColor,
-              prefix: Icons.short_text,
-            ),
-            const SizedBox(height: 16),
-            CustomLgButton(
-              label: '上記内容で保存',
-              labelColor: kWhiteColor,
-              backgroundColor: kBlueColor,
-              onPressed: () async {
-                if (titleController.text == '') {
-                  if (!mounted) return;
-                  showMessage(context, '通知タイトルを入力してください', false);
-                  return;
-                }
-                if (contentController.text == '') {
-                  if (!mounted) return;
-                  showMessage(context, '通知内容を入力してください', false);
-                  return;
-                }
-                senderNoticeService.update({
-                  'id': widget.notice.id,
-                  'senderId': widget.notice.senderId,
-                  'title': titleController.text,
-                  'content': contentController.text,
-                });
+        children: [
+          CustomTextFormField(
+            controller: titleController,
+            textInputType: TextInputType.name,
+            maxLines: 1,
+            label: '通知タイトル',
+            color: kBlackColor,
+            prefix: Icons.short_text,
+          ),
+          const SizedBox(height: 8),
+          CustomTextFormField(
+            controller: contentController,
+            textInputType: TextInputType.multiline,
+            maxLines: null,
+            label: '通知内容',
+            color: kBlackColor,
+            prefix: Icons.short_text,
+          ),
+          const SizedBox(height: 16),
+          CustomLgButton(
+            label: '上記内容で保存',
+            labelColor: kWhiteColor,
+            backgroundColor: kBlueColor,
+            onPressed: () async {
+              if (titleController.text == '') {
                 if (!mounted) return;
-                Navigator.pop(context);
-              },
-            ),
-            const SizedBox(height: 24),
-            LinkText(
+                showMessage(context, '通知タイトルを入力してください', false);
+                return;
+              }
+              if (contentController.text == '') {
+                if (!mounted) return;
+                showMessage(context, '通知内容を入力してください', false);
+                return;
+              }
+              senderNoticeService.update({
+                'id': widget.notice.id,
+                'senderId': widget.notice.senderId,
+                'title': titleController.text,
+                'content': contentController.text,
+              });
+              if (!mounted) return;
+              Navigator.pop(context);
+            },
+          ),
+          const SizedBox(height: 16),
+          Center(
+            child: LinkText(
               label: 'この通知テンプレートを削除',
               labelColor: kRedColor,
               onTap: () async {
@@ -109,8 +109,8 @@ class _SenderNoticeModScreenState extends State<SenderNoticeModScreen> {
                 Navigator.pop(context);
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

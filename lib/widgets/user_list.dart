@@ -19,30 +19,13 @@ class UserList extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.email,
-                  style: const TextStyle(
-                    color: kGreyColor,
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  user.name,
-                  style: const TextStyle(
-                    color: kBlackColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ],
+        child: Text(
+          user.name,
+          style: const TextStyle(
+            color: kBlackColor,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

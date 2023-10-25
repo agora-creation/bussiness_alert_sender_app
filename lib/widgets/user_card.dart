@@ -24,25 +24,15 @@ class UserCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'ID : ${user.id}',
-                    style: const TextStyle(
-                      color: kGreyColor,
-                      fontSize: 14,
-                    ),
-                  ),
-                  Text(
-                    user.name,
-                    style: const TextStyle(
-                      color: kBlackColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              Text(
+                user.name,
+                style: const TextStyle(
+                  color: kBlackColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               CustomSmButton(
                 label: '強制脱退',

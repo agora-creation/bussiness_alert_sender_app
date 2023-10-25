@@ -49,7 +49,11 @@ class _SenderNoticeScreenState extends State<SenderNoticeScreen> {
                 );
               }
               return ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.only(
+                  left: 8,
+                  right: 8,
+                  bottom: 64,
+                ),
                 itemCount: notices.length,
                 itemBuilder: (context, index) {
                   return NoticeList(
