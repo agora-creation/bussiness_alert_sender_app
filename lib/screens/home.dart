@@ -1,7 +1,6 @@
 import 'package:bussiness_alert_sender_app/common/functions.dart';
 import 'package:bussiness_alert_sender_app/common/style.dart';
 import 'package:bussiness_alert_sender_app/providers/sender.dart';
-import 'package:bussiness_alert_sender_app/screens/sender_group.dart';
 import 'package:bussiness_alert_sender_app/screens/sender_notice.dart';
 import 'package:bussiness_alert_sender_app/screens/settings.dart';
 import 'package:bussiness_alert_sender_app/screens/user.dart';
@@ -49,19 +48,12 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: controller,
         screens: [
           SenderNoticeScreen(senderProvider: senderProvider),
-          SenderGroupScreen(senderProvider: senderProvider),
           UserScreen(senderProvider: senderProvider),
         ],
         items: [
           PersistentBottomNavBarItem(
             icon: const Icon(Icons.notifications),
             title: '通知テンプレート',
-            activeColorPrimary: kBlueColor,
-            inactiveColorPrimary: kGreyColor,
-          ),
-          PersistentBottomNavBarItem(
-            icon: const Icon(Icons.account_tree),
-            title: 'グループ分け',
             activeColorPrimary: kBlueColor,
             inactiveColorPrimary: kGreyColor,
           ),

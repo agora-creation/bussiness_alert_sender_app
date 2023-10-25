@@ -5,7 +5,15 @@ class UserService {
   String collection = 'user';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<UserModel?> select(String? email) async {
+  Future<UserModel?> selectId(String? userId) async {
+    UserModel? ret;
+    await firestore.collection(collection).doc(userId).get().then((value) {
+      ret = UserModel.fromSnapshot(value);
+    });
+    return ret;
+  }
+
+  Future<UserModel?> selectEmail(String? email) async {
     UserModel? ret;
     await firestore
         .collection(collection)

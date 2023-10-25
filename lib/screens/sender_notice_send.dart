@@ -3,6 +3,7 @@ import 'package:bussiness_alert_sender_app/common/style.dart';
 import 'package:bussiness_alert_sender_app/models/sender_notice.dart';
 import 'package:bussiness_alert_sender_app/models/user.dart';
 import 'package:bussiness_alert_sender_app/providers/sender.dart';
+import 'package:bussiness_alert_sender_app/services/fm.dart';
 import 'package:bussiness_alert_sender_app/services/user.dart';
 import 'package:bussiness_alert_sender_app/services/user_notice.dart';
 import 'package:bussiness_alert_sender_app/widgets/custom_lg_button.dart';
@@ -27,6 +28,7 @@ class SenderNoticeSendScreen extends StatefulWidget {
 class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
   UserService userService = UserService();
   UserNoticeService userNoticeService = UserNoticeService();
+  FmServices fmServices = FmServices();
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,7 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
                 fontSize: 16,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             const Text('以下の受信ユーザーに送信します'),
             Container(
               decoration: const BoxDecoration(
@@ -110,17 +112,25 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
                 List<String> userIds =
                     widget.senderProvider.sender?.userIds ?? [];
                 for (String userId in userIds) {
-                  userNoticeService.create({
-                    'id': widget.notice.id,
-                    'userId': userId,
-                    'senderId': widget.notice.senderId,
-                    'senderName': widget.senderProvider.sender?.name,
-                    'title': widget.notice.title,
-                    'content': widget.notice.content,
-                    'isAnswer': widget.notice.isAnswer,
-                    'isRead': false,
-                    'createdAt': DateTime.now(),
-                  });
+                  UserModel? user = await userService.selectId(userId);
+                  if (user != null) {
+                    fmServices.send(
+                      token: user.token,
+                      title: widget.notice.title,
+                      body: widget.notice.content,
+                    );
+                    userNoticeService.create({
+                      'id': widget.notice.id,
+                      'userId': userId,
+                      'senderId': widget.notice.senderId,
+                      'senderName': widget.senderProvider.sender?.name,
+                      'title': widget.notice.title,
+                      'content': widget.notice.content,
+                      'isAnswer': widget.notice.isAnswer,
+                      'isRead': false,
+                      'createdAt': DateTime.now(),
+                    });
+                  }
                 }
                 if (!mounted) return;
                 showMessage(context, '一斉送信が完了しました', true);

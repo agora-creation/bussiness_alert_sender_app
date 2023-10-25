@@ -138,7 +138,7 @@ class _AddDialogState extends State<AddDialog> {
                       backgroundColor: kBlueColor,
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        UserModel? tmpUser = await userService.select(
+                        UserModel? tmpUser = await userService.selectEmail(
                           emailController.text,
                         );
                         if (tmpUser == null) {
