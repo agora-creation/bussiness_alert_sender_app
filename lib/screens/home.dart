@@ -1,5 +1,10 @@
+import 'package:bussiness_alert_sender_app/common/functions.dart';
 import 'package:bussiness_alert_sender_app/common/style.dart';
 import 'package:bussiness_alert_sender_app/providers/sender.dart';
+import 'package:bussiness_alert_sender_app/screens/sender_group.dart';
+import 'package:bussiness_alert_sender_app/screens/sender_notice.dart';
+import 'package:bussiness_alert_sender_app/screens/settings.dart';
+import 'package:bussiness_alert_sender_app/screens/user.dart';
 import 'package:bussiness_alert_sender_app/widgets/custom_persistent_tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
@@ -31,7 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(senderProvider.sender?.name ?? ''),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => showBottomUpScreen(
+              context,
+              const SettingsScreen(),
+            ),
             icon: const Icon(Icons.more_vert),
           ),
         ],
@@ -40,34 +48,27 @@ class _HomeScreenState extends State<HomeScreen> {
         context: context,
         controller: controller,
         screens: [
-          Container(),
-          Container(),
-          Container(),
-          Container(),
+          SenderNoticeScreen(senderProvider: senderProvider),
+          SenderGroupScreen(senderProvider: senderProvider),
+          UserScreen(senderProvider: senderProvider),
         ],
         items: [
           PersistentBottomNavBarItem(
-            icon: const Icon(Icons.calendar_month),
-            title: '通知内容作成',
-            activeColorPrimary: kBaseColor,
+            icon: const Icon(Icons.notifications),
+            title: '通知テンプレート',
+            activeColorPrimary: kBlueColor,
             inactiveColorPrimary: kGreyColor,
           ),
           PersistentBottomNavBarItem(
-            icon: const Icon(Icons.checklist),
-            title: '送信履歴',
-            activeColorPrimary: kBaseColor,
+            icon: const Icon(Icons.account_tree),
+            title: 'グループ分け',
+            activeColorPrimary: kBlueColor,
             inactiveColorPrimary: kGreyColor,
           ),
           PersistentBottomNavBarItem(
-            icon: const Icon(Icons.timer),
-            title: '回答履歴',
-            activeColorPrimary: kBaseColor,
-            inactiveColorPrimary: kGreyColor,
-          ),
-          PersistentBottomNavBarItem(
-            icon: const Icon(Icons.chat),
-            title: '受信者一覧',
-            activeColorPrimary: kBaseColor,
+            icon: const Icon(Icons.group),
+            title: '受信ユーザー',
+            activeColorPrimary: kBlueColor,
             inactiveColorPrimary: kGreyColor,
           ),
         ],

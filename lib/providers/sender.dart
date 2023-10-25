@@ -1,5 +1,6 @@
 import 'package:bussiness_alert_sender_app/common/functions.dart';
 import 'package:bussiness_alert_sender_app/models/sender.dart';
+import 'package:bussiness_alert_sender_app/models/user.dart';
 import 'package:bussiness_alert_sender_app/services/sender.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +22,16 @@ class SenderProvider with ChangeNotifier {
   SenderModel? _sender;
   SenderModel? get sender => _sender;
 
+  TextEditingController nameController = TextEditingController();
   TextEditingController numberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
 
   void clearController() {
+    nameController.clear();
     numberController.clear();
     passwordController.clear();
+    rePasswordController.clear();
   }
 
   SenderProvider.initialize() : auth = FirebaseAuth.instance {
@@ -58,6 +63,71 @@ class SenderProvider with ChangeNotifier {
       _status = AuthStatus.unauthenticated;
       notifyListeners();
       error = 'ログインに失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> updateSenderName() async {
+    String? error;
+    if (nameController.text == '') error = '発信者名を入力してください';
+    try {
+      senderService.update({
+        'id': _sender?.id,
+        'name': nameController.text,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> updateSenderPassword() async {
+    String? error;
+    if (passwordController.text == '') error = 'パスワードを入力してください';
+    if (passwordController.text != rePasswordController.text) {
+      error = 'パスワードが一致しません';
+    }
+    try {
+      senderService.update({
+        'id': _sender?.id,
+        'password': passwordController.text,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> addUser(UserModel user) async {
+    String? error;
+    try {
+      List<String> userIds = _sender?.userIds ?? [];
+      if (!userIds.contains(user.id)) {
+        userIds.add(user.id);
+      }
+      senderService.update({
+        'id': _sender?.id,
+        'userIds': userIds,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> removeUser(UserModel user) async {
+    String? error;
+    try {
+      List<String> userIds = _sender?.userIds ?? [];
+      if (userIds.contains(user.id)) {
+        userIds.remove(user.id);
+      }
+      senderService.update({
+        'id': _sender?.id,
+        'userIds': userIds,
+      });
+    } catch (e) {
+      error = e.toString();
     }
     return error;
   }

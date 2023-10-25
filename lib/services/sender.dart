@@ -5,6 +5,10 @@ class SenderService {
   String collection = 'sender';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  void update(Map<String, dynamic> values) {
+    firestore.collection(collection).doc(values['id']).update(values);
+  }
+
   Future<SenderModel?> select(String? number) async {
     SenderModel? ret;
     await firestore

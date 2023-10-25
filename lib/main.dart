@@ -4,6 +4,7 @@ import 'package:bussiness_alert_sender_app/providers/sender.dart';
 import 'package:bussiness_alert_sender_app/screens/home.dart';
 import 'package:bussiness_alert_sender_app/screens/login.dart';
 import 'package:bussiness_alert_sender_app/screens/splash.dart';
+import 'package:bussiness_alert_sender_app/services/fm.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,7 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FmServices().initNotifications();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
