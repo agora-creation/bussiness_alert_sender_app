@@ -8,6 +8,7 @@ class UserNoticeModel {
   String _title = '';
   String _content = '';
   bool _isAnswer = false;
+  String _answer = '';
   bool _isRead = false;
   DateTime _createdAt = DateTime.now();
 
@@ -18,6 +19,7 @@ class UserNoticeModel {
   String get title => _title;
   String get content => _content;
   bool get isAnswer => _isAnswer;
+  String get answer => _answer;
   bool get isRead => _isRead;
   DateTime get createdAt => _createdAt;
 
@@ -31,6 +33,7 @@ class UserNoticeModel {
     _title = map['title'] ?? '';
     _content = map['content'] ?? '';
     _isAnswer = map['isAnswer'] ?? false;
+    _answer = map['answer'] ?? '';
     _isRead = map['isRead'] ?? false;
     if (map['createdAt'] != null) {
       _createdAt = map['createdAt'].toDate() ?? DateTime.now();
