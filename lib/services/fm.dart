@@ -68,7 +68,15 @@ class FmServices {
   }
 
   Future initNotifications() async {
-    await messaging.requestPermission();
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
     await initPushNotifications();
     await initLocalNotifications();
   }
