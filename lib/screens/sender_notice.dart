@@ -3,6 +3,7 @@ import 'package:bussiness_alert_sender_app/common/style.dart';
 import 'package:bussiness_alert_sender_app/models/sender_notice.dart';
 import 'package:bussiness_alert_sender_app/providers/sender.dart';
 import 'package:bussiness_alert_sender_app/screens/sender_notice_add.dart';
+import 'package:bussiness_alert_sender_app/screens/sender_notice_history.dart';
 import 'package:bussiness_alert_sender_app/screens/sender_notice_mod.dart';
 import 'package:bussiness_alert_sender_app/screens/sender_notice_send.dart';
 import 'package:bussiness_alert_sender_app/services/sender_notice.dart';
@@ -58,7 +59,12 @@ class _SenderNoticeScreenState extends State<SenderNoticeScreen> {
                 itemBuilder: (context, index) {
                   return NoticeList(
                     notice: notices[index],
-                    answerOnPressed: () {},
+                    historyOnPressed: () => showBottomUpScreen(
+                      context,
+                      SenderNoticeHistoryScreen(
+                        notice: notices[index],
+                      ),
+                    ),
                     sendOnPressed: () => showBottomUpScreen(
                       context,
                       SenderNoticeSendScreen(

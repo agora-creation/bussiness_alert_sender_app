@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class NoticeList extends StatelessWidget {
   final SenderNoticeModel notice;
-  final Function()? answerOnPressed;
+  final Function()? historyOnPressed;
   final Function()? sendOnPressed;
   final Function()? modifyOnPressed;
 
   const NoticeList({
     required this.notice,
-    this.answerOnPressed,
+    this.historyOnPressed,
     this.sendOnPressed,
     this.modifyOnPressed,
     super.key,
@@ -56,12 +56,12 @@ class NoticeList extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      notice.isAnswer
+                      notice.isSend
                           ? CustomSmButton(
-                              label: '回答確認',
+                              label: '送信履歴',
                               labelColor: kWhiteColor,
-                              backgroundColor: kOrangeColor,
-                              onPressed: answerOnPressed,
+                              backgroundColor: kCyanColor,
+                              onPressed: historyOnPressed,
                             )
                           : Container(),
                       Row(

@@ -191,6 +191,7 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
                     'id': widget.notice.id,
                     'senderId': widget.notice.senderId,
                     'isSend': true,
+                    'sendUserIds': sendUserIds,
                   });
                 }
               }

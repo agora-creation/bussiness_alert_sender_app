@@ -27,6 +27,21 @@ class UserService {
     return ret;
   }
 
+  Future<List<UserModel>> selectList(List<String> userIds) async {
+    List<UserModel> ret = [];
+    await firestore.collection(collection).get().then((value) {
+      if (value.docs.isNotEmpty) {
+        for (DocumentSnapshot<Map<String, dynamic>> doc in value.docs) {
+          UserModel user = UserModel.fromSnapshot(doc);
+          if (userIds.contains(user.id)) {
+            ret.add(user);
+          }
+        }
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>> streamList() {
     return firestore
         .collection(collection)
