@@ -1,3 +1,4 @@
+import 'package:bussiness_alert_sender_app/models/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SenderModel {
@@ -6,6 +7,7 @@ class SenderModel {
   String _name = '';
   String _password = '';
   List<String> userIds = [];
+  List<GroupModel> groups = [];
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -21,6 +23,7 @@ class SenderModel {
     _name = map['name'] ?? '';
     _password = map['password'] ?? '';
     userIds = _convertUserIds(map['userIds'] ?? []);
+    groups = _convertGroups(map['groups']);
     if (map['createdAt'] != null) {
       _createdAt = map['createdAt'].toDate() ?? DateTime.now();
     }
@@ -30,6 +33,14 @@ class SenderModel {
     List<String> ret = [];
     for (String id in list) {
       ret.add(id);
+    }
+    return ret;
+  }
+
+  List<GroupModel> _convertGroups(List list) {
+    List<GroupModel> ret = [];
+    for (Map map in list) {
+      ret.add(GroupModel.fromMap(map));
     }
     return ret;
   }
