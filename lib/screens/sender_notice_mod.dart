@@ -110,6 +110,7 @@ class _SenderNoticeModScreenState extends State<SenderNoticeModScreen> {
               },
             ),
           ),
+          const SizedBox(height: 40),
         ],
       ),
     );

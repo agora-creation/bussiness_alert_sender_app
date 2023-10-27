@@ -67,19 +67,31 @@ class NoticeList extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          CustomSmButton(
-                            label: '一斉送信',
-                            labelColor: kWhiteColor,
-                            backgroundColor: kCyanColor,
-                            onPressed: sendOnPressed,
-                          ),
+                          notice.isSend == false
+                              ? CustomSmButton(
+                                  label: '一斉送信',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kCyanColor,
+                                  onPressed: sendOnPressed,
+                                )
+                              : const CustomSmButton(
+                                  label: '一斉送信',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kGreyColor,
+                                ),
                           const SizedBox(width: 8),
-                          CustomSmButton(
-                            label: '編集',
-                            labelColor: kWhiteColor,
-                            backgroundColor: kBlueColor,
-                            onPressed: modifyOnPressed,
-                          ),
+                          notice.isSend == false
+                              ? CustomSmButton(
+                                  label: '編集',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kBlueColor,
+                                  onPressed: modifyOnPressed,
+                                )
+                              : const CustomSmButton(
+                                  label: '編集',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kGreyColor,
+                                ),
                         ],
                       ),
                     ],

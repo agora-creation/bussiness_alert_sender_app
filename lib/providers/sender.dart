@@ -1,4 +1,5 @@
 import 'package:bussiness_alert_sender_app/common/functions.dart';
+import 'package:bussiness_alert_sender_app/models/group.dart';
 import 'package:bussiness_alert_sender_app/models/sender.dart';
 import 'package:bussiness_alert_sender_app/models/user.dart';
 import 'package:bussiness_alert_sender_app/services/sender.dart';
@@ -125,6 +126,70 @@ class SenderProvider with ChangeNotifier {
       senderService.update({
         'id': _sender?.id,
         'userIds': userIds,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> createGroup(String name) async {
+    String? error;
+    if (name == '') error = 'グループ名を入力してください';
+    try {
+      List<Map> groups = [];
+      for (GroupModel group in _sender?.groups ?? []) {
+        groups.add(group.toMap());
+      }
+      groups.add({
+        'name': name,
+        'userIds': [],
+      });
+      senderService.update({
+        'id': _sender?.id,
+        'groups': groups,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> groupInUser(
+    GroupModel targetGroup,
+    List<String> userIds,
+  ) async {
+    String? error;
+    try {
+      List<Map> groups = [];
+      for (GroupModel group in _sender?.groups ?? []) {
+        if (group.name == targetGroup.name) {
+          group.userIds = userIds;
+        }
+        groups.add(group.toMap());
+      }
+      senderService.update({
+        'id': _sender?.id,
+        'groups': groups,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> removeGroup(GroupModel targetGroup) async {
+    String? error;
+    try {
+      List<Map> groups = [];
+      for (GroupModel group in _sender?.groups ?? []) {
+        if (group.name != targetGroup.name) {
+          groups.add(group.toMap());
+        }
+      }
+      senderService.update({
+        'id': _sender?.id,
+        'groups': groups,
       });
     } catch (e) {
       error = e.toString();

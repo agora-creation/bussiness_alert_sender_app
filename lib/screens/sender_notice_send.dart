@@ -1,9 +1,11 @@
 import 'package:bussiness_alert_sender_app/common/functions.dart';
 import 'package:bussiness_alert_sender_app/common/style.dart';
+import 'package:bussiness_alert_sender_app/models/group.dart';
 import 'package:bussiness_alert_sender_app/models/sender_notice.dart';
 import 'package:bussiness_alert_sender_app/models/user.dart';
 import 'package:bussiness_alert_sender_app/providers/sender.dart';
 import 'package:bussiness_alert_sender_app/services/fm.dart';
+import 'package:bussiness_alert_sender_app/services/sender_notice.dart';
 import 'package:bussiness_alert_sender_app/services/user.dart';
 import 'package:bussiness_alert_sender_app/services/user_notice.dart';
 import 'package:bussiness_alert_sender_app/widgets/custom_lg_button.dart';
@@ -26,9 +28,38 @@ class SenderNoticeSendScreen extends StatefulWidget {
 }
 
 class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
+  SenderNoticeService senderNoticeService = SenderNoticeService();
   UserService userService = UserService();
   UserNoticeService userNoticeService = UserNoticeService();
   FmServices fmServices = FmServices();
+  List<GroupModel> groups = [];
+  List<DropdownMenuItem> groupItems = [
+    const DropdownMenuItem(
+      value: '全ての受信ユーザー',
+      child: Text('全ての受信ユーザー'),
+    ),
+  ];
+  String? groupSelected = '全ての受信ユーザー';
+  List<String> sendUserIds = [];
+
+  void _init() {
+    setState(() {
+      groups = widget.senderProvider.sender?.groups ?? [];
+      for (GroupModel group in groups) {
+        groupItems.add(DropdownMenuItem(
+          value: group.name,
+          child: Text(group.name),
+        ));
+      }
+      sendUserIds = widget.senderProvider.sender?.userIds ?? [];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +79,14 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
+          const Text(
+            '一斉送信が完了しましたら、「編集」「一斉送信」ができなくなります。',
+            style: TextStyle(
+              color: kRedColor,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 8),
           Text(
             widget.notice.title,
             style: const TextStyle(
@@ -64,8 +103,32 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
               fontSize: 16,
             ),
           ),
-          const SizedBox(height: 16),
-          const Text('以下の受信ユーザーに送信します'),
+          const SizedBox(height: 24),
+          const Text(
+            '送信するグループを選択してください',
+            style: TextStyle(
+              color: kRedColor,
+              fontSize: 14,
+            ),
+          ),
+          DropdownButton(
+            isExpanded: true,
+            items: groupItems,
+            value: groupSelected,
+            onChanged: (value) {
+              setState(() {
+                groupSelected = value;
+                if (groupSelected != '全ての受信ユーザー') {
+                  GroupModel group = groups.singleWhere(
+                    (e) => e.name == groupSelected,
+                  );
+                  sendUserIds = group.userIds;
+                } else {
+                  sendUserIds = widget.senderProvider.sender?.userIds ?? [];
+                }
+              });
+            },
+          ),
           Container(
             decoration: const BoxDecoration(
               border: Border(
@@ -79,13 +142,11 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
                 stream: userService.streamList(),
                 builder: (context, snapshot) {
                   List<UserModel> users = [];
-                  List<String> userIds =
-                      widget.senderProvider.sender?.userIds ?? [];
                   if (snapshot.hasData) {
                     for (DocumentSnapshot<Map<String, dynamic>> doc
                         in snapshot.data!.docs) {
                       UserModel user = UserModel.fromSnapshot(doc);
-                      if (userIds.contains(user.id)) {
+                      if (sendUserIds.contains(user.id)) {
                         users.add(user);
                       }
                     }
@@ -107,9 +168,7 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
             labelColor: kWhiteColor,
             backgroundColor: kBlueColor,
             onPressed: () async {
-              List<String> userIds =
-                  widget.senderProvider.sender?.userIds ?? [];
-              for (String userId in userIds) {
+              for (String userId in sendUserIds) {
                 UserModel? user = await userService.selectId(userId);
                 if (user != null) {
                   fmServices.send(
@@ -128,6 +187,11 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
                     'isRead': false,
                     'createdAt': DateTime.now(),
                   });
+                  senderNoticeService.update({
+                    'id': widget.notice.id,
+                    'senderId': widget.notice.senderId,
+                    'isSend': true,
+                  });
                 }
               }
               if (!mounted) return;
@@ -135,6 +199,7 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
               Navigator.pop(context);
             },
           ),
+          const SizedBox(height: 40),
         ],
       ),
     );

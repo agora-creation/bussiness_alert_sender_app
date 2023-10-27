@@ -89,6 +89,7 @@ class _SenderNoticeAddScreenState extends State<SenderNoticeAddScreen> {
               Navigator.pop(context);
             },
           ),
+          const SizedBox(height: 40),
         ],
       ),
     );
