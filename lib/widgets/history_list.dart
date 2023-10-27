@@ -1,11 +1,14 @@
+import 'package:bussiness_alert_sender_app/common/style.dart';
 import 'package:bussiness_alert_sender_app/models/user.dart';
 import 'package:flutter/material.dart';
 
 class HistoryList extends StatelessWidget {
   final UserModel user;
+  final String? answer;
 
   const HistoryList({
     required this.user,
+    this.answer,
     super.key,
   });
 
@@ -24,6 +27,7 @@ class HistoryList extends StatelessWidget {
             fontFamily: 'SourceHanSansJP-Bold',
           ),
         ),
+        leading: Text(answer ?? ''),
       ),
     );
   }
