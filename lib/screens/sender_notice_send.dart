@@ -79,14 +79,6 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
-          const Text(
-            '一斉送信が完了しましたら、「編集」「一斉送信」ができなくなります。',
-            style: TextStyle(
-              color: kRedColor,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 8),
           Text(
             widget.notice.title,
             style: const TextStyle(
@@ -103,6 +95,34 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
               fontSize: 16,
             ),
           ),
+          const SizedBox(height: 8),
+          widget.notice.isAnswer == true
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '回答を求める：選択肢',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 4),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: widget.notice.choices.map((choice) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: kGreyColor),
+                            ),
+                            child: Text(choice),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                )
+              : Container(),
           const SizedBox(height: 24),
           const Text(
             '送信するグループを選択してください',
@@ -184,6 +204,7 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
                     'title': widget.notice.title,
                     'content': widget.notice.content,
                     'isAnswer': widget.notice.isAnswer,
+                    'choices': widget.notice.choices,
                     'isRead': false,
                     'createdAt': DateTime.now(),
                   });
@@ -199,6 +220,14 @@ class _SenderNoticeSendScreenState extends State<SenderNoticeSendScreen> {
               showMessage(context, '一斉送信が完了しました', true);
               Navigator.pop(context);
             },
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            '※一斉送信が完了したら「編集」「一斉送信」ができなくなります。',
+            style: TextStyle(
+              color: kRedColor,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 40),
         ],

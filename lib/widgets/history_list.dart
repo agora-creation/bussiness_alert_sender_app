@@ -27,7 +27,10 @@ class HistoryList extends StatelessWidget {
             fontFamily: 'SourceHanSansJP-Bold',
           ),
         ),
-        leading: Text(answer ?? ''),
+        trailing: Text(
+          answer ?? '',
+          style: const TextStyle(color: kRedColor),
+        ),
       ),
     );
   }
